@@ -1,3 +1,12 @@
+'''
+This is the old quadratic equation solver written in Python 2
+
+No Matplotlib graphing yet
+
+The purpose of this repo is to rewrite this program in Python 3
+and graph the parabola with Matplotlib
+'''
+
 import math #Imports math module
 
 print 'The form of a quadratic equation is ax^2 + bx + c = 0'

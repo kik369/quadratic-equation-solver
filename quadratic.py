@@ -4,7 +4,15 @@ import numpy as np
 
 print('The form of a quadratic equation is ax\u00B2 + bx + c = 0')
 
-a = float(input('a =  '))
+# check if a != 0
+running = True
+while running:
+    a = float(input('a =  '))
+    if a == 0:
+        print('Variable \'a\' can\'t be zero')
+    else:
+        running = False
+
 b = float(input('b =  '))
 c = float(input('c =  '))
 

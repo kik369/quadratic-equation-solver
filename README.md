@@ -1,2 +1,2 @@
 # quadratic-equation-solver
-Solve and graph quadratic equations
+Solve and graph quadratic equations.

@@ -10,25 +10,26 @@ GRID_COLOR = "#857C79"
 PLOT_COLOR = "#555386"  # Assuming this color for the plot line
 
 
-def get_coefficients():
+def get_coefficients_from_args():
     """
-    Prompts the user to input coefficients a, b, and c for a quadratic equation.
+    Gets coefficients a, b, and c from command line arguments.
     Ensures that 'a' is not zero.
     """
-    print("The form of a quadratic equation is ax² + bx + c = 0")
+    if len(sys.argv) != 4:
+        print("Usage: python quadratic.py <a> <b> <c>")
+        print(
+            "       a, b, and c are coefficients of the quadratic equation (ax² + bx + c)"
+        )
+        sys.exit(1)
 
-    while True:
-        try:
-            a = float(input("Enter coefficient a (must be non-zero): "))
-            if a == 0:
-                raise ValueError
-            break
-        except ValueError:
-            print("Invalid input. Coefficient 'a' must be a non-zero number.")
-
-    b = float(input("Enter coefficient b: "))
-    c = float(input("Enter coefficient c: "))
-    return a, b, c
+    try:
+        a, b, c = float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3])
+        if a == 0:
+            raise ValueError("Coefficient 'a' must be non-zero.")
+        return a, b, c
+    except ValueError as e:
+        print(f"Invalid input: {e}")
+        sys.exit(1)
 
 
 def calculate_discriminant(a, b, c):
@@ -112,7 +113,7 @@ def plot_graph(a, b, c, roots):
 
 def main():
     try:
-        a, b, c = get_coefficients()
+        a, b, c = get_coefficients_from_args()
         discriminant = calculate_discriminant(a, b, c)
         roots = find_roots(a, b, discriminant)
         print_equation_info(a, b, c, discriminant, roots)

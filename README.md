@@ -51,6 +51,12 @@ python quadratic.py 1 -5 6
 
 This will solve the equation `x² - 5x + 6 = 0`.
 
+## Screenshots
+
+![Figure_1](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_1.png)
+![Figure_2](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_2.png)
+![Figure_3](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_3.png)
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.

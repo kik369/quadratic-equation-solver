@@ -53,6 +53,7 @@ This will solve the equation `x² - 5x + 6 = 0`.
 
 ## Screenshots
 
+![Figure_4](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_4.png)
 ![Figure_1](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_1.png)
 ![Figure_2](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_2.png)
 ![Figure_3](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_3.png)

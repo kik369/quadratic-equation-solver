@@ -24,12 +24,20 @@ To use this script, you'll need Python installed on your system along with a few
     ```
     cd quadratic-equation-solver
     ```
-3. (Optional) Create and activate a virtual environment:
+3. (Optional) Create and activate a virtual environment using `virtualenv`:
+
     ```
-    python -m venv env
-    env\Scripts\activate # On Windows
+    # First, install virtualenv if you haven't already
+    pip install virtualenv
+
+    # Create a virtual environment
+    virtualenv env
+
+    # Activate the virtual environment
+    env\Scripts\activate  # On Windows
     source env/bin/activate  # On Unix or MacOS
     ```
+
 4. Install the required packages:
     ```
     pip install -r requirements.txt
@@ -51,7 +59,7 @@ python quadratic.py 1 -5 6
 
 This will solve the equation `x² - 5x + 6 = 0`.
 
-## Screenshots
+## Output
 
 ![Figure_4](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_4.png)
 ![Figure_1](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_1.png)

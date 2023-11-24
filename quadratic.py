@@ -1,153 +1,92 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
-print('The form of a quadratic equation is ax\u00B2 + bx + c = 0')
-
-# check if a != 0
-while True:
-    a = float(input('a =  '))
-    if a == 0:
-        print('Variable \'a\' can\'t be zero')
-    else:
-        break
-
-b = float(input('b =  '))
-c = float(input('c =  '))
+# Styling constants from col.txt
+FIGURE_FACECOLOR = "#EFF0F2"
+AXIS_FACECOLOR = "#EFF0F2"
+GRID_COLOR = "#857C79"
+PLOT_COLOR = "#555386"  # Assuming this color for the plot line
 
 
-def solving(a, b, c):
-    a = f'{a}x\u00B2 '
-    if b >= 0:
-        b = f'+ {b}x '
-    else:
-        b = f'{b}x '
+def get_coefficients():
+    """
+    Prompts the user to input coefficients a, b, and c for a quadratic equation.
+    Ensures that 'a' is not zero.
+    """
+    while True:
+        try:
+            a = float(input("Enter coefficient a (must be non-zero): "))
+            if a == 0:
+                raise ValueError
+            break
+        except ValueError:
+            print("Invalid input. Coefficient 'a' must be a non-zero number.")
 
-    if c >= 0:
-        c = f'+ {c} = 0'
-    else:
-        c = f'{c} = 0'
-    return(a + b + c)
+    b = float(input("Enter coefficient b: "))
+    c = float(input("Enter coefficient c: "))
+    return a, b, c
 
 
-print('Solving', solving(a, b, c))
+def calculate_discriminant(a, b, c):
+    """
+    Calculates and returns the discriminant of the quadratic equation.
+    """
+    return b**2 - 4 * a * c
 
-discriminant = round(b**2 - (4*a*c), 2)
 
-# x and y coordinates of the vertex
-x_vertex = -b / (2 * a)
-y_vertex = a * (x_vertex**2) + (b * x_vertex) + c
-x_vertex = round(x_vertex, 2)
-y_vertex = round(y_vertex, 2)
+def find_roots(a, b, discriminant):
+    """
+    Finds and returns the roots of the quadratic equation.
+    """
+    sqrt_discriminant = math.sqrt(abs(discriminant))
+    if discriminant > 0:
+        return [(-b + sqrt_discriminant) / (2 * a), (-b - sqrt_discriminant) / (2 * a)]
+    elif discriminant == 0:
+        return [-b / (2 * a)]
+    else:  # Complex roots
+        real_part = -b / (2 * a)
+        imaginary_part = sqrt_discriminant / (2 * a)
+        return [complex(real_part, imaginary_part), complex(real_part, -imaginary_part)]
 
-x_plot = []
-y_plot = []
 
-if discriminant > 0:
-    print('Discriminant > 0')
-    print(f'Discriminant = {discriminant}')
-    print('Two real solutions')
-    x1 = (-b + math.sqrt(discriminant)) / (2*a)
-    x2 = (-b - math.sqrt(discriminant)) / (2*a)
+def plot_graph(a, b, c, roots):
+    """
+    Plots the quadratic equation and its roots.
+    """
+    plt.figure(facecolor=FIGURE_FACECOLOR)
+    ax = plt.gca()
+    ax.set_facecolor(AXIS_FACECOLOR)
 
-    x1 = round(x1, 2)
-    x2 = round(x2, 2)
+    # Create a range of x values from root to root
+    x_range = np.linspace(min(roots).real - 1, max(roots).real + 1, 400)
+    y_values = a * x_range**2 + b * x_range + c
 
-    if x1 > x2:
-        x1, x2 = x2, x1
+    ax.plot(x_range, y_values, color=PLOT_COLOR, linewidth=2)
+    for root in roots:
+        ax.plot(
+            root.real, a * root.real**2 + b * root.real + c, "ro"
+        )  # Plotting the roots
 
-    print(f'x1 = {x1}')
-    print(f'x2 = {x2}')
-    print(f'Vertex = ({x_vertex}, {y_vertex})')
+    # Styling
+    plt.axhline(0, color=GRID_COLOR)  # x-axis
+    plt.axvline(0, color=GRID_COLOR)  # y-axis
+    plt.grid(color=GRID_COLOR, linestyle=":")
+    plt.title(f"Graph of {a}x² + {b}x + {c} = 0")
+    plt.tight_layout()
+    plt.show()
 
-    plot_until = abs((x2 - x1) / 2)
-    for x in np.linspace(x1 - plot_until, x2 + plot_until):
-        y = a * (x**2) + (b * x) + c
-        x_plot.append(x)
-        y_plot.append(y)
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+def main():
+    try:
+        a, b, c = get_coefficients()
+        discriminant = calculate_discriminant(a, b, c)
+        roots = find_roots(a, b, discriminant)
+        plot_graph(a, b, c, roots)
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-    ax.plot(x_plot, y_plot, color='lightblue', linewidth=3)
-    ax.plot(x1, 0, marker='o', markersize=10, color='b', alpha=0.65)
-    ax.plot(x2, 0, marker='o', markersize=10, color='b', alpha=0.65)
-    ax.plot(x_vertex, y_vertex, marker='o',
-            markersize=10, color='b', alpha=0.65)
-    ax.annotate(f'x\u2081 ({x1}, 0)', xy=(
-        x1, 0), xytext=(0, 25), textcoords='offset points')
-    ax.annotate(f'x\u2082 ({x2}, 0)', xy=(
-        x2, 0), xytext=(0, 25), textcoords='offset points')
-    ax.annotate(f'vertex ({x_vertex}, {y_vertex})', xy=(
-        x_vertex, y_vertex), xytext=(0, 25), textcoords='offset points')
 
-elif discriminant == 0:
-    print('Discriminant = 0')
-    print('One real solution')
-    x1 = (-b + math.sqrt(discriminant)) / (2*a)
-    x1 = round(x1, 2)
-    print(f'x = {x1}')
-    print(f'Vertex = ({x_vertex}, {y_vertex})')
-
-    plot_until = x1
-
-    if -5 < x1 < 5:
-        plot_until = 5
-
-    for x in np.linspace(x1 - abs(plot_until * 2), x1 + abs(plot_until * 2)):
-        y = a * (x**2) + (b * x) + c
-        x_plot.append(x)
-        y_plot.append(y)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-
-    ax.plot(x_plot, y_plot, color='lightblue', linewidth=3)
-    ax.plot(x1, 0, marker='o', markersize=10, color='b', alpha=0.65)
-    ax.annotate(f'x\u2081 = vertex ({x_vertex}, {y_vertex})', xy=(
-        x_vertex, y_vertex), xytext=(0, 25), textcoords='offset points')
-
-else:  # Discriminant < 0
-    print('Discriminant < 0')
-    print(f'Discriminant = {discriminant}')
-    print('Two complex solutions')
-    discriminant = abs(discriminant)
-    imaginary = math.sqrt(discriminant) / (2*a)
-    real_part = -b / (2*a)
-
-    imaginary = round(imaginary, 2)
-    real_part = round(real_part, 2)
-
-    print(f'x1 = {real_part} + {imaginary}i')
-    print(f'x2 = {real_part} - {imaginary}i')
-    print(f'Vertex = ({x_vertex}, {y_vertex})')
-
-    plot_until = real_part
-
-    if -5 < real_part < 5:
-        plot_until = 5
-
-    for x in np.linspace(real_part - abs(plot_until * 2), real_part + abs(plot_until * 2)):
-        y = a * (x**2) + (b * x) + c
-        x_plot.append(x)
-        y_plot.append(y)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-
-    ax.plot(x_plot, y_plot, color='lightblue', linewidth=3)
-    ax.plot(x_vertex, y_vertex, marker='o',
-            markersize=10, color='b', alpha=0.65)
-
-    ax.annotate(f'vertex ({x_vertex}, {y_vertex})', xy=(
-        x_vertex, y_vertex), xytext=(0, 25), textcoords='offset points')
-
-plt.plot(0, 0, marker='o',
-         markersize=10, color='orange', alpha=0.65)
-ax.annotate(f'(0, 0)', xy=(
-    0, 0), xytext=(5, 5), textcoords='offset points')
-plt.axhline(y=0, linewidth=3, color='orange', alpha=0.65)
-plt.axvline(x=0, linewidth=3, color='orange', alpha=0.65)
-plt.title(solving(a, b, c), loc='left', pad=20)
-plt.grid()
-plt.show()
+if __name__ == "__main__":
+    main()

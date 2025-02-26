@@ -46,7 +46,7 @@ python quadratic.py <a> <b> <c>
 
 Here are some example outputs showing the graph of the quadratic equation and its solutions:
 
-![Example 1](https://example.com/path/to/image1.png)
-![Example 2](https://example.com/path/to/image2.png)
-![Example 3](https://example.com/path/to/image3.png)
-![Example 4](https://example.com/path/to/image4.png)
+![Example 1](https://raw.githubusercontent.com/kik369/quadratic-equation-solver/main/img/Figure_1.png)
+![Example 2](https://raw.githubusercontent.com/kik369/quadratic-equation-solver/main/img/Figure_2.png)
+![Example 3](https://raw.githubusercontent.com/kik369/quadratic-equation-solver/main/img/Figure_3.png)
+![Example 4](https://raw.githubusercontent.com/kik369/quadratic-equation-solver/main/img/Figure_4.png)

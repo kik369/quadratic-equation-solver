@@ -2,11 +2,11 @@
 
 ## Description
 
-The `quadratic-equation-solver` is a Python script for solving quadratic equations. It can handle equations with real and complex roots, and it visualizes the equation on a graph.
+The `quadratic-equation-solver` is a robust Python script designed to solve quadratic equations, handling both real and complex roots. It incorporates comprehensive error handling and presents results clearly, including a graphical visualization of the equation. The code is structured for maintainability and testability, following best practices for professional software development.
 
 ## Installation
 
-To use this script, you'll need Python installed on your system along with a few additional libraries.
+To use this script, you'll need Python installed on your system along with the `matplotlib` and `numpy` libraries.
 
 ### Prerequisites
 
@@ -16,56 +16,28 @@ To use this script, you'll need Python installed on your system along with a few
 
 ### Setup
 
-1. Clone the repository:
-    ```
+1.  Clone the repository:
+    ```bash
     git clone https://github.com/kik369/quadratic-equation-solver.git
     ```
-2. Navigate to the cloned directory:
-    ```
+2.  Navigate to the cloned directory:
+    ```bash
     cd quadratic-equation-solver
     ```
-3. (Optional) Create and activate a virtual environment using `virtualenv`:
-
+3.  (Optional) Create and activate a virtual environment:
+    ```bash
+    python3 -m venv .venv  # Create a virtual environment (Use python -m venv .venv on Windows)
+    source .venv/bin/activate  # Activate the virtual environment (Use .venv\Scripts\activate on Windows)
     ```
-    # First, install virtualenv if you haven't already
-    pip install virtualenv
-
-    # Create a virtual environment
-    virtualenv env
-
-    # Activate the virtual environment
-    env\Scripts\activate  # On Windows
-    source env/bin/activate  # On Unix or MacOS
-    ```
-
-4. Install the required packages:
-    ```
+4.  Install the required packages:
+    ```bash
     pip install -r requirements.txt
     ```
 
 ## Usage
 
-Run the script by passing the coefficients of the quadratic equation as arguments:
+Run the script by passing the coefficients of the quadratic equation as command-line arguments:
 
-```
+```bash
 python quadratic.py <a> <b> <c>
 ```
-
-For example:
-
-```
-python quadratic.py 1 -5 6
-```
-
-This will solve the equation `x² - 5x + 6 = 0`.
-
-## Output
-
-![Figure_4](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_4.png)
-![Figure_1](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_1.png)
-![Figure_2](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_2.png)
-![Figure_3](https://github.com/kik369/quadratic-equation-solver/blob/main/img/Figure_3.png)
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.

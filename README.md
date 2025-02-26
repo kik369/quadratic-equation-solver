@@ -41,3 +41,12 @@ Run the script by passing the coefficients of the quadratic equation as command-
 ```bash
 python quadratic.py <a> <b> <c>
 ```
+
+## Example Output
+
+Here are some example outputs showing the graph of the quadratic equation and its solutions:
+
+![Example 1](https://example.com/path/to/image1.png)
+![Example 2](https://example.com/path/to/image2.png)
+![Example 3](https://example.com/path/to/image3.png)
+![Example 4](https://example.com/path/to/image4.png)

@@ -29,7 +29,7 @@ class NonZeroCoeffiecientError(Exception):
 
 def get_coefficients_from_args(args: list[str]) -> tuple[float, float, float]:
     """
-    Gets coefficients a, b, and c from a list of string arguments.  Corrected to handle negative numbers.
+    Gets coefficients a, b, and c from a list of string arguments.
 
     Args:
         args: A list of command-line arguments (including the script name).

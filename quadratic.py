@@ -17,206 +17,176 @@ PLOT_RANGE_EXTENSION = 1
 
 class InvalidInputError(Exception):
     """Custom exception for invalid input."""
-
     pass
 
 
 class NonZeroCoeffiecientError(Exception):
     """Custom exception for when the coeffiecient a is zero."""
-
     pass
 
 
-def get_coefficients_from_args(args: list[str]) -> tuple[float, float, float]:
-    """
-    Gets coefficients a, b, and c from a list of string arguments.
+class QuadraticEquation:
+    """A class representing a quadratic equation in the form ax² + bx + c = 0."""
 
-    Args:
-        args: A list of command-line arguments (including the script name).
+    def __init__(self, a: float, b: float, c: float):
+        """Initialize the quadratic equation with coefficients a, b, and c.
 
-    Returns:
-        A tuple containing the coefficients (a, b, c).
+        Args:
+            a: The coefficient of x²
+            b: The coefficient of x
+            c: The constant term
 
-    Raises:
-        ValueError: If the number of arguments is incorrect.
-        TypeError: If any of the coefficients are not numbers.
-        NonZeroCoeffiecientError: If the coefficient 'a' is zero.
-    """
-    if len(args) != 4:
-        raise ValueError("Usage: python quadratic.py <a> <b> <c>")
-
-    try:
-        a_str, b_str, c_str = args[1], args[2], args[3]
-
-        a = float(a_str)
-        b = float(b_str)
-        c = float(c_str)
-
+        Raises:
+            NonZeroCoeffiecientError: If coefficient 'a' is zero
+        """
         if a == 0:
             raise NonZeroCoeffiecientError("Coefficient 'a' must be non-zero.")
+        self.a = a
+        self.b = b
+        self.c = c
+        self.discriminant = self._calculate_discriminant()
+        self.roots = self._find_roots()
+        self.vertex = self._calculate_vertex()
 
-        return a, b, c
-    except ValueError as e:
-        raise InvalidInputError(f"Invalid input: {e}") from e
-    except TypeError as e:
-        raise InvalidInputError(f"Invalid input: {e}") from e
+    @classmethod
+    def from_command_line_args(cls, args: list[str]) -> 'QuadraticEquation':
+        """Create a QuadraticEquation instance from command line arguments.
 
+        Args:
+            args: A list of command-line arguments (including the script name).
 
-def calculate_discriminant(a: float, b: float, c: float) -> float:
-    """
-    Calculates and returns the discriminant of the quadratic equation.
+        Returns:
+            A QuadraticEquation instance.
 
-    Args:
-        a: The coefficient 'a' of the equation.
-        b: The coefficient 'b' of the equation.
-        c: The coefficient 'c' of the equation.
+        Raises:
+            InvalidInputError: If the command line arguments are incorrect.
+        """
+        if len(args) != 4:
+            raise ValueError("Usage: python quadratic.py <a> <b> <c>")
 
-    Returns:
-        The calculated discriminant.
-    """
-    return b**2 - 4 * a * c
+        try:
+            a_str, b_str, c_str = args[1], args[2], args[3]
+            a = float(a_str)
+            b = float(b_str)
+            c = float(c_str)
+            return cls(a, b, c)
+        except ValueError as e:
+            raise InvalidInputError(f"Invalid input: {e}") from e
+        except TypeError as e:
+            raise InvalidInputError(f"Invalid input: {e}") from e
 
+    def _calculate_discriminant(self) -> float:
+        """Calculate the discriminant of the quadratic equation.
 
-def find_roots(a: float, b: float, discriminant: float) -> list[float | complex]:
-    """Finds and returns the roots of the quadratic equation.
+        Returns:
+            The calculated discriminant.
+        """
+        return self.b**2 - 4 * self.a * self.c
 
-    Args:
-        a: The coefficient 'a' of the equation.
-        b: The coefficient 'b' of the equation.
-        discriminant: The calculated discriminant.
+    def _find_roots(self) -> list[float | complex]:
+        """Find the roots of the quadratic equation.
 
-    Returns:
-        A list containing the roots (either real numbers or complex numbers).
-    """
-    sqrt_discriminant = math.sqrt(abs(discriminant))
-    if discriminant > 0:
-        return [(-b + sqrt_discriminant) / (2 * a), (-b - sqrt_discriminant) / (2 * a)]
-    elif discriminant == 0:
-        return [-b / (2 * a)]
-    else:  # Complex roots
-        real_part = -b / (2 * a)
-        imaginary_part = sqrt_discriminant / (2 * a)
-        return [complex(real_part, imaginary_part), complex(real_part, -imaginary_part)]
+        Returns:
+            A list containing the roots (either real numbers or complex numbers).
+        """
+        sqrt_discriminant = math.sqrt(abs(self.discriminant))
+        if self.discriminant > 0:
+            return [
+                (-self.b + sqrt_discriminant) / (2 * self.a),
+                (-self.b - sqrt_discriminant) / (2 * self.a)
+            ]
+        elif self.discriminant == 0:
+            return [-self.b / (2 * self.a)]
+        else:  # Complex roots
+            real_part = -self.b / (2 * self.a)
+            imaginary_part = sqrt_discriminant / (2 * self.a)
+            return [complex(real_part, imaginary_part),
+                    complex(real_part, -imaginary_part)]
 
+    def _calculate_vertex(self) -> tuple[float, float]:
+        """Calculate the vertex of the parabola.
 
-def print_equation_info(
-    a: float, b: float, c: float, discriminant: float, roots: list[float | complex]
-) -> None:
-    """
-    Prints the equation, discriminant, nature of solutions, solutions, and vertex.
+        Returns:
+            A tuple (x, y) representing the vertex coordinates.
+        """
+        x = -self.b / (2 * self.a)
+        y = self.a * x**2 + self.b * x + self.c
+        return (x, y)
 
-    Args:
-        a: The coefficient 'a' of the equation.
-        b: The coefficient 'b' of the equation.
-        c: The coefficient 'c' of the equation.
-        discriminant: The calculated discriminant.
-        roots: A list of the calculated roots.
-    """
-    print(f"Solving {a}x² + {b}x + {c} = 0")
-    print(f"Discriminant = {discriminant}")
+    def print_info(self) -> None:
+        """Print the equation information, including the equation itself,
+        discriminant, nature of solutions, solutions, and vertex."""
+        print(f"Solving {self.a}x² + {self.b}x + {self.c} = 0")
+        print(f"Discriminant = {self.discriminant}")
 
-    if discriminant > 0:
-        print("Two real solutions")
-    elif discriminant == 0:
-        print("One real solution")
-    else:
-        print("Two complex solutions")
+        if self.discriminant > 0:
+            print("Two real solutions")
+        elif self.discriminant == 0:
+            print("One real solution")
+        else:
+            print("Two complex solutions")
 
-    for i, root in enumerate(roots, start=1):
-        print(f"x{i} = {root}")
+        for i, root in enumerate(self.roots, start=1):
+            print(f"x{i} = {root}")
 
-    vertex_x = -b / (2 * a)
-    vertex_y = a * vertex_x**2 + b * vertex_x + c
-    print(f"Vertex = ({vertex_x}, {vertex_y})")
+        print(f"Vertex = {self.vertex}")
 
+    def plot(self) -> None:
+        """Plot the quadratic equation graph."""
+        plt.figure(facecolor=FIGURE_FACECOLOR)
+        ax = plt.gca()
+        ax.set_facecolor(AXIS_FACECOLOR)
 
-def plot_graph(a: float, b: float, c: float, roots: list[float | complex]) -> None:
-    """
-    Plots the quadratic equation.
-    Handles both real and complex roots.
+        # Determine range for x values
+        if all(isinstance(root, complex) for root in self.roots):
+            # For complex roots, plot around the vertex
+            x_range = np.linspace(
+                self.vertex[0] - 5, self.vertex[0] + 5, X_RANGE_POINTS
+            )
+        else:
+            # For real roots, extend the range a bit beyond the roots
+            min_real_root = (
+                min(root.real for root in self.roots
+                    if not isinstance(root, complex))
+                if any(not isinstance(root, complex) for root in self.roots) else 0
+            )
+            max_real_root = (
+                max(root.real for root in self.roots
+                    if not isinstance(root, complex))
+                if any(not isinstance(root, complex) for root in self.roots) else 0
+            )
+            x_range = np.linspace(
+                min_real_root - PLOT_RANGE_EXTENSION,
+                max_real_root + PLOT_RANGE_EXTENSION, X_RANGE_POINTS
+            )
 
-    Args:
-        a: The coefficient 'a' of the equation.
-        b: The coefficient 'b' of the equation.
-        c: The coefficient 'c' of the equation.
-        roots: A list of the calculated roots.
-    """
-    plt.figure(facecolor=FIGURE_FACECOLOR)
-    ax = plt.gca()
-    ax.set_facecolor(AXIS_FACECOLOR)
+        y_values = self.a * x_range**2 + self.b * x_range + self.c
 
-    # Determine range for x values
-    if all(isinstance(root, complex) for root in roots):
-        # For complex roots, plot around the vertex
-        vertex_x = -b / (2 * a)
-        x_range = np.linspace(vertex_x - 5, vertex_x + 5, X_RANGE_POINTS)
-    else:
-        # For real roots, extend the range a bit beyond the roots
-        min_real_root = (
-            min(root.real for root in roots if not isinstance(root, complex))
-            if any(not isinstance(root, complex) for root in roots)
-            else 0
-        )
-        max_real_root = (
-            max(root.real for root in roots if not isinstance(root, complex))
-            if any(not isinstance(root, complex) for root in roots)
-            else 0
-        )
-        x_range = np.linspace(
-            min_real_root - PLOT_RANGE_EXTENSION,
-            max_real_root + PLOT_RANGE_EXTENSION,
-            X_RANGE_POINTS,
-        )
+        ax.plot(x_range, y_values, color=PLOT_COLOR, linewidth=2)
+        for root in self.roots:
+            if not isinstance(root, complex):
+                ax.plot(
+                    root.real,
+                    self.a * root.real**2 + self.b * root.real + self.c,
+                    "ro"
+                )  # Plotting the real roots
 
-    y_values = a * x_range**2 + b * x_range + c
+        ax.plot(self.vertex[0], self.vertex[1], "go", label="Vertex")
 
-    ax.plot(x_range, y_values, color=PLOT_COLOR, linewidth=2)
-    for root in roots:
-        if not isinstance(root, complex):
-            ax.plot(
-                root.real, a * root.real**2 + b * root.real + c, "ro"
-            )  # Plotting the real roots
-
-    vertex_x = -b / (2 * a)
-    vertex_y = a * vertex_x**2 + b * vertex_x + c
-    ax.plot(vertex_x, vertex_y, "go", label="Vertex")
-
-    plt.axhline(0, color=GRID_COLOR, linewidth=AXIS_LINEWIDTH)  # x-axis
-    plt.axvline(0, color=GRID_COLOR, linewidth=AXIS_LINEWIDTH)  # y-axis
-    plt.grid(color=GRID_COLOR, linestyle=":", linewidth=GRID_LINEWIDTH)
-    plt.title(f"Graph of {a}x² + {b}x + {c} = 0")
-    plt.tight_layout()
-    plt.show()
-
-
-def quadratic_solver(
-    args: list[str],
-) -> tuple[float, float, float, float, list[float | complex]]:
-    """
-    Solves the quadratic equation based on command line arguments.
-
-    Args:
-        args: A list of command-line arguments (including the script name).
-
-    Returns:
-        a tuple containing (a,b,c, discriminant, roots)
-    Raises:
-        InvalidInputError: if the command line arguments are incorrect
-    """
-    a, b, c = get_coefficients_from_args(args)
-    discriminant = calculate_discriminant(a, b, c)
-    roots = find_roots(a, b, discriminant)
-    return a, b, c, discriminant, roots
+        plt.axhline(0, color=GRID_COLOR, linewidth=AXIS_LINEWIDTH)  # x-axis
+        plt.axvline(0, color=GRID_COLOR, linewidth=AXIS_LINEWIDTH)  # y-axis
+        plt.grid(color=GRID_COLOR, linestyle=":", linewidth=GRID_LINEWIDTH)
+        plt.title(f"Graph of {self.a}x² + {self.b}x + {self.c} = 0")
+        plt.tight_layout()
+        plt.show()
 
 
 def main():
-    """
-    Main function to run the quadratic equation solver.
-    """
+    """Main function to run the quadratic equation solver."""
     try:
-        a, b, c, discriminant, roots = quadratic_solver(sys.argv)
-        print_equation_info(a, b, c, discriminant, roots)
-        plot_graph(a, b, c, roots)
+        equation = QuadraticEquation.from_command_line_args(sys.argv)
+        equation.print_info()
+        equation.plot()
 
     except InvalidInputError as e:
         print(e)
